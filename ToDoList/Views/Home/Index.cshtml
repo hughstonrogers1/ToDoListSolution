@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "To-Do List";
+}
+
+<div class="text-center">
+    <h1 class="display-4">To-Do List</h1>
+    <p>What is it that we need to get done today?</p>
+</div>
+<div class="container">
+    <div class="small-box mx-auto text-center">
+        <h1 class="display-6">Today's Tasks</h1>
+        <form method="post" asp-controller="ToDo" asp-action="AddTask">
+            @Html.AntiForgeryToken()
+            <div class="input-group mb-3">
+                <input type="text" name="TaskDescription" class="form-control" placeholder="Enter a new task" required>
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+        </form>
+        <ul class="list-group">
+            @if (ViewBag.Tasks != null && ViewBag.Tasks.Count > 0)
+            {
+                foreach (var task in ViewBag.Tasks)
+                {
+                    <li class="list-group-item d-flex align-items-center">
+                        <input type="checkbox" id="task-@task.GetHashCode()" class="me-2 task-checkbox">
+                        <label for="task-@task.GetHashCode()" class="task-label mb-0">@task</label>
+                        <button type="button" class="btn btn-sm delete-task ms-auto" onclick="deleteButton(this)">X</button>
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="list-group-item">No tasks added yet.</li>
+            }
+        </ul>
+    </div>
+</div>
+
