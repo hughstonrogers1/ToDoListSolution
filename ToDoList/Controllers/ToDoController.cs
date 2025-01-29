@@ -33,6 +33,25 @@ namespace ToDoList.Controllers
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditTask(string OriginalTask, string EditedTask)
+        {
+            if (string.IsNullOrWhiteSpace(EditedTask))
+            {
+                return Json(new { success = false });
+            }
+
+            if (Tasks.Contains(OriginalTask))
+            {
+                int index = Tasks.IndexOf(OriginalTask);
+                Tasks[index] = EditedTask;
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false });
+        }
+
         //private readonly AppDbContext _context;
 
         //public ToDoController(AppDbContext context)

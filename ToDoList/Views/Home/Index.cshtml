@@ -24,7 +24,10 @@
                     <li class="list-group-item d-flex align-items-center">
                         <input type="checkbox" id="task-@task.GetHashCode()" class="me-2 task-checkbox">
                         <label for="task-@task.GetHashCode()" class="task-label mb-0">@task</label>
-                        <button type="button" class="btn btn-sm delete-task ms-auto" onclick="deleteButton(this)">X</button>
+                        <div class="ms-auto">
+                            <button type="button" class="btn btn-primary btn-sm me-2" onclick="openEditModal('@task')">Edit</button>
+                            <button type="button" class="btn btn-sm delete-task ms-auto" onclick="deleteButton(this)">X</button>
+                        </div>
                     </li>
                 }
             }
@@ -36,3 +39,21 @@
     </div>
 </div>
 
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editTaskId">
+                <input type="text" id="editTaskInput" class="form-control" placeholder="Edit task">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveTask()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>

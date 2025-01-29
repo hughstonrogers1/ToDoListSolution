@@ -16,7 +16,7 @@ function deleteButton(button) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value // for CSRF protection
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value 
             },
             body: formData
         })
@@ -30,4 +30,53 @@ function deleteButton(button) {
             })
             .catch(error => console.error('Error:', error));
     }
+}
+
+function openEditModal(taskText) {
+    document.getElementById("editTaskInput").value = taskText; 
+    document.getElementById("editTaskId").value = taskText; 
+    var editModal = new bootstrap.Modal(document.getElementById("editTaskModal"));
+    editModal.show();
+}
+
+function saveTask() {
+    debugger;
+    let originalTask = document.getElementById("editTaskId").value; 
+    let editedTask = document.getElementById("editTaskInput").value; 
+
+    if (!editedTask.trim()) {
+        alert("Task cannot be empty.");
+        return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append('OriginalTask', originalTask);
+    formData.append('EditedTask', editedTask);
+
+    fetch('/ToDo/EditTask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value 
+        },
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+
+                let taskLabels = document.querySelectorAll('.task-label');
+                taskLabels.forEach(label => {
+                    if (label.innerText === originalTask) {
+                        label.innerText = editedTask;
+                    }
+                });
+
+                var editModal = bootstrap.Modal.getInstance(document.getElementById("editTaskModal"));
+                editModal.hide();
+            } else {
+                alert('Failed to update task.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
 }
